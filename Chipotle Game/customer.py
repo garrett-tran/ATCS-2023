@@ -1,7 +1,6 @@
 import random 
 class Customer:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
         self.order = None
 
     def place_order(self):

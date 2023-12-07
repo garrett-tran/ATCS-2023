@@ -1,9 +1,8 @@
 import random
-import pygame
+
 
 class Player:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
         self.inventory = []
 
     def pick_up_food(self, appliance):

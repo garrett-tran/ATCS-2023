@@ -1,30 +1,47 @@
+import pygame 
 from fsm import FSM
-class Appliance:
+import time 
+class Appliance(pygame.sprite.Sprite):
     #States
     COOKING = "ck"
     READY = "rdy"
     EMPTY = "mt"
 
     #Inputs
-    START_COOKING = "sc"
-    PICK_UP = "pu"
+    INTERACT = "int"
+    TIMER_UP = "tu"
 
     def __init__(self, time, food, name):
         self.time = time 
         self.food = food
         self.name = name
+        self.timer_duration = time
 
         self.fsm = FSM(self.EMPTY)
         self.init_fsm()
 
     def init_fsm(self):
-        """
-        Adds all states to the FSM
-        """
+        self.fsm.add_transition(self.INTERACT, self.EMPTY, self.food_cooking, self.COOKING)
+        self.fsm.add_transition(self.TIMER_UP, self.COOKING, self.food_ready, self.READY)
+        self.fsm.add_transition(self.INTERACT, self.READY, self.food_collected, self.EMPTY)
+
+
         
+                
 
-    def cook(self):
-        self.fsm.process(self.START_COOKING)
-
-    def pick_up(self):
-        self.fsm.process(self.PICK_UP)
+        
+    def update(self, key):
+        if key == "int":
+            self.fsm.process(self.INTERACT)
+        elif key == "tu":
+            self.fsm.process(self.TIMER_UP)
+                
+                
+    def food_ready(self):
+        print (self.name + " Ready")
+    def food_collected(self):
+        print ("Picked up " + self.name)
+    def food_cooking(self):
+        print(self.name + " Cooking...")
+    def get_state(self):
+        return self.fsm.current_state
