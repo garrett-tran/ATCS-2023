@@ -4,9 +4,10 @@ class Customer:
         self.order = None
 
     def place_order(self):
-        menu = ["Burrito", "Quesadilla", "Chips", "Drink"]
+        menu = ["chips", "burrito",]
         self.order = random.choice(menu)
-        print(f"{self.name} placed an order for {self.order}.")
+        print(f"Customer placed an order for {self.order}.")
+        return self.order
 
     def receive_order(self):
-        print(f"{self.name} received {self.order}. Enjoy!")
+        print(f"Customer received {self.order}. Enjoy!")
