@@ -1,4 +1,3 @@
-from player import Player
 from appliance import Appliance
 from customer import Customer
 import sys
@@ -17,18 +16,17 @@ class game:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.timer = 2001
-        self.player = Player() 
         self.inventory = []
         
 
         
-        self.burrito = Appliance(4, "burrito", "burrito maker", (0,0))
-        self.chips = Appliance(2, "chips", "chips maker", (1,0))
-        self.rice = Appliance(3, "rice", "rice cooker", (2,0))
-        self.tortilla = Appliance(1, "tortilla", "tortilla press", (3,0))
-        self.cheese = Appliance(2, "cheese", "cheese grater", (3,1))
-        self.quesadilla = Appliance(4, "quesadilla", "quesadilla oven", (0,1))
-        self.drink = Appliance(2, "drink", "drink machine", (0,2))
+        self.burrito = Appliance(4, "Burrito", "Burrito (b)", (0,0))
+        self.chips = Appliance(2, "Chips", "Chips (c)", (1,0))
+        self.rice = Appliance(3, "Rice", "Rice (r)", (2,0))
+        self.tortilla = Appliance(1, "Tortilla", "Tortilla (t)", (3,0))
+        self.cheese = Appliance(2, "Cheese", "Cheese (e)", (3,1))
+        self.quesadilla = Appliance(4, "Quesadilla", "Quesadilla (q)", (0,1))
+        self.drink = Appliance(2, "Drink", "Drink (d)", (0,2))
 
         self.appliances = []
         self.appliances.append(self.burrito)
@@ -41,16 +39,16 @@ class game:
 
         self.customer = Customer()
         self.money = 0
-        self.values = {"burrito": 10, "chips": 5, "quesadilla": 8, "drink": 3}
+        self.values = {"Burrito": 10, "Chips": 5, "Quesadilla": 8, "Drink": 3}
 
         # Set up the display
         width, height = 800, 600
         self.screen = pygame.display.set_mode((width, height))
         pygame.display.set_caption("Chipotle Game")
-        background_image_path = "Chipotle Game/images/chipotle_logo.png"  # Replace with the path to your background image file
-        self.background_image = pygame.image.load(background_image_path)
-        self.background_image = pygame.transform.scale(self.background_image, (200, 200))
-
+        background_image_path = "Chipotle Game/images/chipotle_logo.png"
+        self.background_image = pygame.transform.scale(pygame.image.load(background_image_path), (200, 200))
+        formulas_path = "Chipotle Game/images/food_formulas.png" 
+        self.formulas_image = pygame.transform.scale(pygame.image.load(formulas_path), (240, 100))
         self.text_color = (0, 0, 0)
         self.font = pygame.font.Font(None, 35)
         
@@ -94,60 +92,60 @@ class game:
                 if event.type == pygame.KEYDOWN:
                     # Check for specific keys
                     if event.key == pygame.K_b:
-                        if "tortilla" in self.inventory and "rice" in self.inventory:
+                        if "Tortilla" in self.inventory and "Rice" in self.inventory:
                             if self.burrito.get_state() == "mt":
                                 self.burrito_timer = self.timer
                                 self.burrito.update("int")
-                                self.inventory.remove("tortilla")
-                                self.inventory.remove("rice")
+                                self.inventory.remove("Tortilla")
+                                self.inventory.remove("Rice")
                         if self.burrito.get_state() == "rdy":
                             self.burrito.update("int")
-                            self.inventory.append("burrito")
+                            self.inventory.append("Burrito")
                     if event.key == pygame.K_c:
                         if self.chips.get_state() == "mt":
                             self.chips_timer = self.timer
                             self.chips.update("int")
                         if self.chips.get_state() == "rdy":
                             self.chips.update("int")
-                            self.inventory.append("chips")
+                            self.inventory.append("Chips")
                     if event.key == pygame.K_r:
                         if self.rice.get_state() == "mt":
                             self.rice_timer = self.timer
                             self.rice.update("int")
                         if self.rice.get_state() == "rdy":
                             self.rice.update("int")
-                            self.inventory.append("rice")
+                            self.inventory.append("Rice")
                     if event.key == pygame.K_t:
                         if self.tortilla.get_state() == "mt":
                             self.tortilla_timer = self.timer
                             self.tortilla.update("int")
                         if self.tortilla.get_state() == "rdy":
                             self.tortilla.update("int")
-                            self.inventory.append("tortilla")
+                            self.inventory.append("Tortilla")
                     if event.key == pygame.K_e:
                         if self.cheese.get_state() == "mt":
                             self.cheese_timer = self.timer
                             self.cheese.update("int")
                         if self.cheese.get_state() == "rdy":
                             self.cheese.update("int")
-                            self.inventory.append("cheese")
+                            self.inventory.append("Cheese")
                     if event.key == pygame.K_d:
                         if self.drink.get_state() == "mt":
                             self.drink_timer = self.timer
                             self.drink.update("int")
                         if self.drink.get_state() == "rdy":
                             self.drink.update("int")
-                            self.inventory.append("drink")
+                            self.inventory.append("Drink")
                     if event.key == pygame.K_q:
-                        if "tortilla" in self.inventory and "cheese" in self.inventory:
+                        if "Tortilla" in self.inventory and "Cheese" in self.inventory:
                             if self.quesadilla.get_state() == "mt":
                                 self.quesadilla_timer = self.timer
                                 self.quesadilla.update("int")
-                                self.inventory.remove("tortilla")
-                                self.inventory.remove("cheese")
+                                self.inventory.remove("Tortilla")
+                                self.inventory.remove("Cheese")
                         if self.quesadilla.get_state() == "rdy":
                             self.quesadilla.update("int")
-                            self.inventory.append("quesadilla")
+                            self.inventory.append("Quesadilla")
 
 
                     #Logic for fufilling order
@@ -155,7 +153,7 @@ class game:
                         in_list = False
                         for i in range (len(self.inventory)):
                             if self.inventory[i] == order:
-                                self.current_time +=2000
+                                self.current_time +=5000
                                 self.customer.receive_order()
                                 self.inventory.pop(i)
                                 self.money += self.values[order]
@@ -198,6 +196,7 @@ class game:
         pygame.draw.rect(self.screen, "white", (300, 300, 200, 200))
     def draw_background(self):
         self.screen.blit(self.background_image, (300, 300))
+        self.screen.blit(self.formulas_image, (200, 100))
     def draw_text(self):
         self.screen.blit(self.timer_surface, (0,50))
         self.screen.blit(self.font.render("Profit: $" + str(self.money), True, self.text_color), (0, 100))
