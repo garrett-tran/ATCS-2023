@@ -12,14 +12,14 @@ class Appliance(pygame.sprite.Sprite):
     INTERACT = "int"
     TIMER_UP = "tu"
 
-    def __init__(self, time, food, name, position):
+    def __init__(self, time, food, name, positions):
         super().__init__()
         self.time = time 
         self.food = food
         self.name = name
         self.color = "gray"
         self.timer_duration = time
-        self.position = position
+        self.xPos, self.yPos = positions
         self.text_color = (0, 0, 0)
         self.font = pygame.font.Font(None, 20)
         self.fsm = FSM(self.EMPTY)
@@ -54,8 +54,8 @@ class Appliance(pygame.sprite.Sprite):
         return self.fsm.current_state
     
     def draw(self, screen):
-        x = 200+100*self.position
-        y = 500
+        x = 200+100*self.xPos
+        y = 200+100*self.yPos
         text_surface = self.font.render(self.name, True, self.text_color)
         text_rect = text_surface.get_rect()
         text_rect.center = (x+50, y+50)
