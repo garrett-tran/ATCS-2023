@@ -24,19 +24,16 @@ class Customer(pygame.sprite.Sprite):
         self.text_rect = self.text_surface.get_rect()
         self.text_rect.center = (600,85)
         
-
+    #Customer places a random order from the menu
     def place_order(self):
         menu = ["Chips", "Burrito", "Quesadilla", "Drink"]
         self.order = random.choice(menu)
         self.text_surface = self.font.render(f"I would like one {self.order}.", True, self.text_color)
         print(f"I would like one {self.order}.")
         return self.order
-
-    def receive_order(self):
-        print(f"Customer received {self.order}. Enjoy!")
     
+    #Draws what the customer says depending on if they are ordering or saying thank you
     def draw(self, screen, thanks=False):
-        
         screen.blit(self.speech_bubble, self.bubble_rect)
         screen.blit(self.smile, self.smile_rect)
         if thanks == False:

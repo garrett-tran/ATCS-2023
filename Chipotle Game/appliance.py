@@ -25,31 +25,31 @@ class Appliance(pygame.sprite.Sprite):
         self.fsm = FSM(self.EMPTY)
         self.init_fsm()
 
+    #Adds transitions to FSM
     def init_fsm(self):
         self.fsm.add_transition(self.INTERACT, self.EMPTY, self.food_cooking, self.COOKING)
         self.fsm.add_transition(self.TIMER_UP, self.COOKING, self.food_ready, self.READY)
         self.fsm.add_transition(self.INTERACT, self.READY, self.food_collected, self.EMPTY)
 
-        
-                
-
-        
     def update(self, key):
         if key == "int":
             self.fsm.process(self.INTERACT)
         elif key == "tu":
             self.fsm.process(self.TIMER_UP)
                 
-                
+    #Methods for each action/state the appliance could be in
     def food_ready(self):
         print (self.food + " Ready")
         self.color = "green"
+
     def food_collected(self):
         print ("Picked up " + self.food)
         self.color = "grey"
+
     def food_cooking(self):
         print(self.name + " Cooking...")
         self.color = "yellow"
+
     def get_state(self):
         return self.fsm.current_state
     

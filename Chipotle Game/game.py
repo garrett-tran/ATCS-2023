@@ -1,25 +1,22 @@
 from appliance import Appliance
 from customer import Customer
-import sys
-
 import pygame
 
 class game:
-    BACKGROUND_COLOR = (196, 164, 132)
-    # Initialize Pygame
-
-    
-    #sprites
     appliances = pygame.sprite.Group()
-    
+    BACKGROUND_COLOR = (196, 164, 132)
+
     def __init__(self):
         pygame.init()
+        self.customer = Customer()
+
+        #Starts clock for appliances to reference off of
         self.clock = pygame.time.Clock()
         self.timer = 2001
         self.inventory = []
         
 
-        
+        #Initialzing appliances with their name, item, and position
         self.burrito = Appliance(4, "Burrito", "Burrito (b)", (0,0))
         self.chips = Appliance(2, "Chips", "Chips (c)", (1,0))
         self.rice = Appliance(3, "Rice", "Rice (r)", (2,0))
@@ -37,11 +34,12 @@ class game:
         self.appliances.append(self.quesadilla)
         self.appliances.append(self.drink)
 
-        self.customer = Customer()
+
+        #Values for how much money you can seel each item for
         self.money = 0
         self.values = {"Burrito": 10, "Chips": 5, "Quesadilla": 8, "Drink": 3}
 
-        # Set up the display
+        # Setting up elements of the main game display
         width, height = 800, 600
         self.screen = pygame.display.set_mode((width, height))
         pygame.display.set_caption("Chipotle Game")
@@ -70,14 +68,18 @@ class game:
         while running:
             self.timer += self.clock.tick(120)
             
+
             if self.timer > 120:
+                #Update Screen every tick
                 self.screen.fill(self.BACKGROUND_COLOR)
                 self.draw_table()
                 self.draw_background()
+                self.draw_text()
                 for a in self.appliances:
                     a.draw(self.screen)
                 
-                self.draw_text()
+
+                #Logic for customer how long customer says "Thank you" after recieving order
                 if self.timer - self.text_time > 2000:
                     self.customer.draw(self.screen, False)
                 else:
@@ -87,10 +89,10 @@ class game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    exit()
                 
                 if event.type == pygame.KEYDOWN:
-                    # Check for specific keys
+                    #Logic for interacting with each appliance
                     if event.key == pygame.K_b:
                         if "Tortilla" in self.inventory and "Rice" in self.inventory:
                             if self.burrito.get_state() == "mt":
@@ -154,7 +156,6 @@ class game:
                         for i in range (len(self.inventory)):
                             if self.inventory[i] == order:
                                 self.current_time +=5000
-                                self.customer.receive_order()
                                 self.inventory.pop(i)
                                 self.money += self.values[order]
                                 self.text_time = self.timer
@@ -163,6 +164,7 @@ class game:
                                 break
                         if in_list == False:
                             self.current_time -= 5000
+                #Logic for the game timer counting down
                 elif event.type == self.timer_event:
                     # Decrease the current time
                     self.current_time -= 1000
@@ -172,10 +174,11 @@ class game:
                     
 
                     if self.current_time <= 0:
-                    # Timer reached zero, you can handle this event as needed
                         running = False
                         print("Time's up!")
-                        running = False
+                        print("Profit: $" + str(self.money))
+
+            #Logic that handles the cooking times for each appliance         
             if self.burrito.get_state() == "ck" and self.timer - self.burrito_timer > self.burrito.time*1000:
                 self.burrito.update("tu")
             elif self.chips.get_state() == "ck" and self.timer - self.chips_timer > self.chips.time*1000:
@@ -191,6 +194,7 @@ class game:
             elif self.drink.get_state() == "ck" and self.timer - self.drink_timer > self.drink.time*1000:
                 self.drink.update("tu")
                 
+    #Methods that draw each element of the scene
     def draw_table(self):
         pygame.draw.rect(self.screen, "black", (200, 200, 400, 400))
         pygame.draw.rect(self.screen, "white", (300, 300, 200, 200))
@@ -201,9 +205,10 @@ class game:
         self.screen.blit(self.timer_surface, (0,50))
         self.screen.blit(self.font.render("Profit: $" + str(self.money), True, self.text_color), (0, 100))
         self.screen.blit(self.font.render("Inventory" + str(self.inventory), True, self.text_color), (0, 0))
-
+        self.screen.blit(self.font.render("Fulfill Order (f)", True, self.text_color), (320, 375))
            
 
 if __name__ == "__main__":
     g = game()
     g.run()
+
